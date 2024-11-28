@@ -17,8 +17,8 @@ An API Gateway written in Go
 -   [ ] Request and Response Transformation:
     -   Modify incoming requests and outgoing responses to match the expected format of backend services and clients.
 -   [ ] Logging and Monitoring:
-    -   Log requests and responses for auditing and debugging purposes.
-    -   Monitor traffic, performance, and errors to ensure the health of the system.
+    -   [x] Log requests and responses for auditing and debugging purposes.
+    -   [ ] Monitor traffic, performance, and errors to ensure the health of the system.
 -   [ ] Security:
     -   Protect against common web vulnerabilities such as SQL injection, XSS, and CSRF.
     -   Ensure secure communication using HTTPS.
