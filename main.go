@@ -55,7 +55,7 @@ func (s *Server) Start() error {
 	}
 
 	go func() {
-		s.logger.Info("Starting server on: ", s.ListenAddr)
+		s.logger.Info("Starting server on port ", s.ListenAddr)
 		if err := server.ListenAndServe(); err != http.ErrServerClosed {
 			s.logger.Fatal("Server failed: ", err)
 		}
@@ -77,7 +77,7 @@ func main() {
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		IdleTimeout:    30 * time.Second,
-		MaxHeaderBytes: 1 << 20,
+		MaxHeaderBytes: 1 << 20, // 1mb
 	}
 
 	logger, err := initLogger()
@@ -86,6 +86,8 @@ func main() {
 	}
 
 	server := NewServer(cfg, *logger)
+	server.InitializeRoutes()
+
 	if err := server.Start(); err != nil {
 		logger.Fatal("starting server")
 	}
