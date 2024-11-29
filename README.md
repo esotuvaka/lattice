@@ -16,6 +16,9 @@ An API Gateway written in Go
     -   Cache responses from backend services to reduce latency and improve performance for frequently requested data.
 -   [ ] Request and Response Transformation:
     -   Modify incoming requests and outgoing responses to match the expected format of backend services and clients.
+-   [x] Containerize:
+    -   [x] Dockerfile
+    -   [x] compose.yml
 -   [ ] Logging and Monitoring:
     -   [x] Log requests and responses for auditing and debugging purposes.
     -   [ ] Monitor traffic, performance, and errors to ensure the health of the system.
