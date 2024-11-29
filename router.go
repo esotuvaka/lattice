@@ -4,23 +4,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"sync"
 )
-
-func (s *Server) aggregateResponses(urls []string) (map[string]interface{}, error) {
-	responses := make(map[string]interface{})
-	var wg sync.WaitGroup
-	errCh := make(chan error, len(urls))
-
-	for _, url := range urls {
-		wg.Add(1)
-		go func(url string) {
-			defer wg.Done()
-
-			
-		}
-	}
-}
 
 type Route struct {
 	Path       string

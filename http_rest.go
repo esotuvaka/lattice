@@ -8,6 +8,9 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 	"time"
 
 	"go.uber.org/zap"
@@ -69,7 +72,7 @@ func isSuccessStatus(code int) bool {
 	return code >= 200 && code < 300
 }
 
-func (c *HttpClient) execReq(ctx context.Context, req *http.Request, attempts int) ([]byte, error) {
+func (c *HttpClient) execReq(req *http.Request, attempts int) ([]byte, error) {
 	var lastErr error
 	for i := 0; i < attempts; i++ {
 		start := time.Now()
@@ -140,7 +143,25 @@ func (c *HttpClient) PostJsonReq(ctx context.Context, url string, payload interf
 		req.Header.Set(k, v)
 	}
 
-	return c.execReq(ctx, req, c.maxAttempts)
+	return c.execReq(req, c.maxAttempts)
+}
+
+func (c *HttpClient) PostFormReq(ctx context.Context, url string, formData url.Values, headers map[string]string) ([]byte, error) {
+	encodedData := formData.Encode()
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, strings.NewReader(encodedData))
+	if err != nil {
+		return nil, fmt.Errorf("creating request: %w", err)
+	}
+
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-Length", strconv.Itoa(len(encodedData)))
+
+	for k, v := range headers {
+		req.Header.Set(k, v)
+	}
+
+	return c.execReq(req, c.maxAttempts)
 }
 
 func (c *HttpClient) GetReq(ctx context.Context, url string, headers map[string]string) ([]byte, error) {
@@ -153,7 +174,7 @@ func (c *HttpClient) GetReq(ctx context.Context, url string, headers map[string]
 		req.Header.Set(k, v)
 	}
 
-	return c.execReq(ctx, req, c.maxAttempts)
+	return c.execReq(req, c.maxAttempts)
 }
 
 func (c *HttpClient) PutJsonReq(ctx context.Context, url string, payload interface{}, headers map[string]string) ([]byte, error) {
@@ -172,7 +193,26 @@ func (c *HttpClient) PutJsonReq(ctx context.Context, url string, payload interfa
 		req.Header.Set(k, v)
 	}
 
-	return c.execReq(ctx, req, c.maxAttempts)
+	return c.execReq(req, c.maxAttempts)
+}
+
+func (c *HttpClient) PatchJsonReq(ctx context.Context, url string, payload interface{}, headers map[string]string) ([]byte, error) {
+	jsonBody, err := json.Marshal(payload)
+	if err != nil {
+		return nil, fmt.Errorf("marshaling JSON: %w", err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPatch, url, bytes.NewBuffer(jsonBody))
+	if err != nil {
+		return nil, fmt.Errorf("creating request: %w", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	for k, v := range headers {
+		req.Header.Set(k, v)
+	}
+
+	return c.execReq(req, c.maxAttempts)
 }
 
 func (c *HttpClient) DeleteReq(ctx context.Context, url string, headers map[string]string) ([]byte, error) {
@@ -185,5 +225,5 @@ func (c *HttpClient) DeleteReq(ctx context.Context, url string, headers map[stri
 		req.Header.Set(k, v)
 	}
 
-	return c.execReq(ctx, req, c.maxAttempts)
+	return c.execReq(req, c.maxAttempts)
 }
