@@ -6,29 +6,30 @@ A high-performance API Gateway written in Go that provides authentication, cachi
 
 **Core Features**
 
--   Dynamic route configuration via Redis
--   JWT and API key authentication
--   Response caching with Redis
--   Distributed rate limiting
--   Reverse proxy to upstream services
--   Automatic retry and circuit breaking
--   Load balancing
+-   [ ] Dynamic route configuration via Redis
+-   [ ] JWT and API key authentication
+-   [ ] Response caching with Redis
+-   [ ] Distributed rate limiting
+-   [x] Reverse proxy to upstream services
+-   [x] Automatic retry
+-   [ ] Circuit breaking
+-   [ ] Load balancing
 
 **Observability**
 
--   Prometheus metrics
--   Grafana dashboards
--   Structured logging (zap)
--   Distributed tracing
--   Health checks
+-   [ ] Prometheus metrics
+-   [ ] Grafana dashboards
+-   [x] Structured logging (zap)
+-   [ ] Distributed tracing
+-   [ ] Health checks
 
 **Security**
 
--   JWT validation
--   API key management
--   Role-based access control
--   TLS termination
--   Request validation
+-   [ ] JWT validation
+-   [ ] API key management
+-   [ ] Role-based access control
+-   [ ] TLS termination
+-   [ ] Request validation
 
 ## Architecture
 

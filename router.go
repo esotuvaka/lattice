@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type Route struct {
@@ -43,4 +45,9 @@ func (s *Server) InitializeRoutes() {
 		towerHandler := Tower(handler, route.Middleware...)
 		s.router.Handle(route.Path, towerHandler)
 	}
+}
+
+func (s *Server) InitializeMetrics() {
+	// TODO: prometheus metrics
+	s.router.Handle("/metrics", promhttp.Handler())
 }

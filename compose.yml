@@ -5,7 +5,7 @@ services:
         ports:
             - "6379:6379"
 
-    gateway:
+    lattice:
         container_name: lattice
         build:
             context: .
