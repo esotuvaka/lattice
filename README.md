@@ -35,11 +35,11 @@ A high-performance API Gateway written in Go that provides authentication, cachi
 ```mermaid
 graph TD
     Client[Client] --> Lattice[Lattice API Gateway]
+    Redis[(Redis)] --> Lattice
     Lattice --> Redis[(Redis)]
-    Lattice --> Service1[Service 1]
-    Lattice --> Service2[Service 2]
-    Lattice --> ServiceN[Service N]
-
-    Prometheus[Prometheus] --> Lattice
-    Grafana[Grafana] --> Prometheus
+    Lattice --> Upstream1[Upstream 1]
+    Lattice --> Upstream2[Upstream 2]
+    Lattice --> UpstreamN[Upstream N]
+    Lattice --> Prometheus[Prometheus]
+    Prometheus --> Grafana[Grafana]
 ```
