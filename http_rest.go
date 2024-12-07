@@ -46,7 +46,7 @@ func NewHttpClient(client *http.Client, logger *zap.SugaredLogger) *HttpClient {
 }
 
 func calcBackoff(attempt int, baseDelay time.Duration) time.Duration {
-	// use bit shfiting for int exponential growth: 2^n
+	// use bit shifting for int exponential growth: 2^n
 	backoff := baseDelay * time.Duration(1<<time.Duration(attempt))
 
 	// add +/- 20% jitter
