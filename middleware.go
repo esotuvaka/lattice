@@ -122,11 +122,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var u User
 	json.NewDecoder(r.Body).Decode(&u)
 
+	// TODO: adapt to reading auth from a configurable database
+	// use repository pattern for DB access, with ENV variables for table to query
 	if u.Username == "admin" && u.Password == "123456" {
 		tokenString, err := createToken(u.Username)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprint(w, "no user found")
+			fmt.Println(w, "no user found")
 		}
 		w.WriteHeader(http.StatusOK)
 		fmt.Println(w, tokenString)
