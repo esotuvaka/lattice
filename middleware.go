@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -109,4 +111,47 @@ func MethodMiddleware(allowedMethods []string) Middleware {
 	}
 }
 
-// TODO: Implement auth/RBAC middleware
+type User struct {
+	Username string
+	Password string
+}
+
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var u User
+	json.NewDecoder(r.Body).Decode(&u)
+
+	if u.Username == "admin" && u.Password == "123456" {
+		tokenString, err := createToken(u.Username)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprint(w, "no user found")
+		}
+		w.WriteHeader(http.StatusOK)
+		fmt.Println(w, tokenString)
+	} else {
+		w.WriteHeader(http.StatusUnauthorized)
+		fmt.Println(w, "invalid credentials")
+	}
+}
+
+func ProtectedHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	tokenString := r.Header.Get("Authorization")
+	if tokenString == "" {
+		w.WriteHeader(http.StatusUnauthorized)
+		fmt.Fprint(w, "missing authorization header")
+		return
+	}
+	tokenString = tokenString[len("Bearer "):]
+
+	err := verifyToken(tokenString)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		fmt.Fprint(w, "invalid token")
+		return
+	}
+
+	fmt.Fprint(w, "access granted")
+}
